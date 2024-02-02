@@ -4,20 +4,20 @@
 {% endblock %}
 
 {% block body %}
-	<style>
-		.example-wrapper {
-			margin: 1em auto;
-			max-width: 800px;
-			width: 95%;
-			font: 18px / 1.5 sans-serif;
-		}
-		.example-wrapper code {
-			background: #F5F5F5;
-			padding: 2px 6px;
-		}
-	</style>
 
-	<div class="example-wrapper">
-		Page Accueil
-	</div>
+	<main class="container">
+		<div class="row g-5">
+			<div class="col-xl-8">
+				<h3 class="pb-4 mb-4 fst-italic border-bottom">Articles récents</h3>
+				<p style="height: 1000px;"></p>
+			</div>
+
+			<div class="col-xl-4">
+				<div class="position-sticky" style="top: 2rem;">
+					{% include 'widget/about.html.twig' %}
+				</div>
+			</div>
+		</div>
+	</main>
+
 {% endblock %}
