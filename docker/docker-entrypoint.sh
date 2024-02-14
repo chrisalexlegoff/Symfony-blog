@@ -14,9 +14,6 @@ if [[ "$1" == apache2* ]] || [ "$1" = 'php-fpm' ]; then
             echo "INSTALLING DEPENDENCIES with composer install"
             cd /var/www/html && composer install
         fi
-        if [ ! -e /var/www/html/vendor/web-profiler-bundle ]; then
-            
-        fi
     fi
 fi
 
