@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 if [[ $1 == apache2* ]] || [ $1 = 'php-fpm' ]; then
     if [ ! -e /var/www/html/public/index.php ]; then
