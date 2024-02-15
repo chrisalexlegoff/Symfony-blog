@@ -34,8 +34,4 @@ COPY apache-default.conf /etc/apache2/sites-available/000-default.conf
 WORKDIR /var/www/html
 VOLUME /var/www/html
 
-COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
-
-ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["apache2-foreground"]
