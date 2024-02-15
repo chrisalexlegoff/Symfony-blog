@@ -4,12 +4,10 @@ services:
   php-apache:
     build:
       context: ./docker
-    environment:
-      - SYMFONY_PARAMS=${SYMFONY_PARAMS}
     volumes:
       - ./app/:/var/www/html
     ports:
-      - "8080:8080"
+      - "8080:80"
 
   postgresql:
     image: postgres:${POSTGRES_VERSION:-14}-alpine
@@ -24,12 +22,6 @@ services:
       - 5432:5432
     volumes:
       - db-data:/var/lib/postgresql/data:rw
-    networks:
-      - rr-net
-
-networks:
-  rr-net:
-    driver: bridge
 
 volumes:
   db-data:
