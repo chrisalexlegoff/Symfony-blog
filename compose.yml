@@ -4,13 +4,13 @@ services:
   php8-sf6:
     container_name: php8-sf6
     build:
-      build: docker
+      context: ./docker
     environment:
       - SYMFONY_PARAMS=${SYMFONY_PARAMS}
     ports:
-      - "8080:8080"
+      - "8080:8000"
     volumes:
-      - ./project:/var/www/html
+      - ./app:/var/www/html
 
   database:
     image: postgres:13-alpine

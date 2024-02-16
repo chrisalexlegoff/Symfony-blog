@@ -1,6 +1,4 @@
-ARG SYMFONY_PARAMS="--version=7.0.*"
-
-FROM php:latest-cli
+FROM php:8.2-cli
 RUN apt-get update \
     &&  apt-get install -y --no-install-recommends \
     locales apt-utils git libicu-dev g++ libpng-dev libxml2-dev libzip-dev libonig-dev libxslt-dev unzip libpq-dev nodejs npm wget nano \
@@ -14,7 +12,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- \
     &&  mv composer.phar /usr/local/bin/composer
 
 RUN curl -sS https://get.symfony.com/cli/installer | bash \
-    &&  mv /root/.symfony/bin/symfony /usr/local/bin
+    &&  mv /root/.symfony5/bin/symfony /usr/local/bin
 
 RUN docker-php-ext-configure \
     intl \
@@ -35,8 +33,12 @@ RUN echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/xdebug.ini
 RUN git config --global user.email "legoffchristophealexandre@gmail.com" \
     &&  git config --global user.name "legoffchristophealexandre@gmail.com"
 
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
 CMD tail -f /dev/null
 
-WORKDIR /var/www/html/
+WORKDIR /var/www/html
 
-ENTRYPOINT ["docker-entrypoint.sh"]
+ENTRYPOINT [ "docker-entrypoint.sh" ]
