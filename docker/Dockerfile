@@ -34,7 +34,9 @@ COPY apache-default.conf /etc/apache2/sites-available/000-default.conf
 WORKDIR /var/www/html
 VOLUME /var/www/html
 
-COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+# COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+COPY --link --chmod=755 docker-entrypoint.sh /usr/local/bin/docker-entrypoint
+
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 ENTRYPOINT ["docker-entrypoint.sh"]
