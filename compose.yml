@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   php8-sf6:
-    container_name: php8-sf6
+    container_name: symfony-test
     build:
       context: ./docker
     environment:
@@ -22,6 +22,9 @@ services:
       - db-data:/var/lib/postgresql/data:rw
     ports:
       - "5432"
+
+networks:
+  bridge:
 
 volumes:
   db-data:
