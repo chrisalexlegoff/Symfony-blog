@@ -4,10 +4,10 @@ if [[ "$1" == apache2* ]] || [ "$1" = 'php-fpm' ]; then
     if [ ! -e /var/www/html/public/index.php ]; then
         if [ -n "$SYMFONY_PARAMS" ]; then
             echo "CREATING PROJECT with params: /usr/bin/symfony new /var/www/html $SYMFONY_PARAMS"
-            cd /var/www/html && composer create-project "symfony/skeleton $SYMFONY_PARAMS"
+            cd /var/www/html && composer create-project "symfony/skeleton $SYMFONY_PARAMS" --stability="stable" --prefer-dist --no-progress --no-interaction --no-install
         else
             echo "CREATING PROJECT with std-params: /usr/bin/symfony new /var/www/html $SYMFONY_PARAMS_STD"
-            cd /var/www/html && composer create-project "symfony/skeleton $SYMFONY_PARAMS_STD"
+            cd /var/www/html && composer create-project "symfony/skeleton $SYMFONY_PARAMS_STD" --stability="stable" --prefer-dist --no-progress --no-interaction --no-install
         fi
     else
         if [ ! -e /var/www/html/vendor ]; then
