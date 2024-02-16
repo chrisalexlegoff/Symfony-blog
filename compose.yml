@@ -1,27 +1,27 @@
 version: "3.8"
 
 services:
-  php-apache:
+  php8-sf6:
+    container_name: php8-sf6
     build:
-      context: ./docker
+      build: docker
     environment:
       - SYMFONY_PARAMS=${SYMFONY_PARAMS}
-    volumes:
-      - ./app/:/var/www/html
     ports:
       - "8080:8080"
-
-  db:
-    image: mariadb:10.6.4-focal
     volumes:
-      - dbdata:/var/lib/mysql
+      - ./project:/var/www/html
+
+  database:
+    image: postgres:13-alpine
     environment:
-      TZ: "Europe/Paris"
-      MYSQL_ALLOW_EMPTY_PASSWORD: "no"
-      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
-      MYSQL_USER: "${MYSQL_USER}"
-      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
-      MYSQL_DATABASE: "${MYSQL_DATABASE}"
+      POSTGRES_DB: app
+      POSTGRES_PASSWORD: ChangeMe
+      POSTGRES_USER: symfony
+    volumes:
+      - db-data:/var/lib/postgresql/data:rw
+    ports:
+      - "5432"
 
 volumes:
-  dbdata:
+  db-data:

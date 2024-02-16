@@ -1,22 +1,30 @@
 ARG SYMFONY_PARAMS="--version=7.0.*"
 
-FROM php:8.2-apache
-#RUN apt update && apt install -y zip git curl && git config --global user.email "you@example.com" && git config --global user.name "Your Name"
-RUN apt update && apt install -y \
-    libicu-dev \
-    libonig-dev \
-    libzip-dev \
-    zip \
-    unzip \
-    curl \
-    git \
-    && git config --global user.email "legoffchristophealexandre@gmail.com" && git config --global user.name "legoffchristophealexandre@gmail.com" \
-    && docker-php-ext-configure intl \
-    && docker-php-ext-install intl \
-    && docker-php-ext-install mbstring \
-    && docker-php-ext-install zip \
-    && docker-php-ext-install opcache 
-RUN docker-php-ext-enable intl mbstring zip opcache
+FROM php:latest-cli
+RUN apt-get update \
+    &&  apt-get install -y --no-install-recommends \
+    locales apt-utils git libicu-dev g++ libpng-dev libxml2-dev libzip-dev libonig-dev libxslt-dev unzip libpq-dev nodejs npm wget nano \
+    apt-transport-https lsb-release ca-certificates
+
+RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen  \
+    &&  echo "fr_FR.UTF-8 UTF-8" >> /etc/locale.gen \
+    &&  locale-gen
+
+RUN curl -sS https://getcomposer.org/installer | php -- \
+    &&  mv composer.phar /usr/local/bin/composer
+
+RUN curl -sS https://get.symfony.com/cli/installer | bash \
+    &&  mv /root/.symfony/bin/symfony /usr/local/bin
+
+RUN docker-php-ext-configure \
+    intl \
+    &&  docker-php-ext-install \
+    pdo pdo_mysql pdo_pgsql opcache intl zip calendar dom mbstring gd xsl
+
+RUN pecl install apcu && docker-php-ext-enable apcu
+
+RUN npm install --global yarn
+
 RUN pecl install xdebug apcu \
     && docker-php-ext-enable xdebug apcu
 RUN echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/xdebug.ini \
@@ -24,20 +32,11 @@ RUN echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/xdebug.ini
     && echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/conf.d/xdebug.ini \
     && echo "xdebug.client_port=9003" >> /usr/local/etc/php/conf.d/xdebug.ini
 
-COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
-ENV COMPOSER_ALLOW_SUPERUSER=1
-ENV SYMFONY_PARAMS_STD="--version=7.0.*"
+RUN git config --global user.email "legoffchristophealexandre@gmail.com" \
+    &&  git config --global user.name "legoffchristophealexandre@gmail.com"
 
-RUN curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | bash && apt install -y symfony-cli
+CMD tail -f /dev/null
 
-COPY apache-default.conf /etc/apache2/sites-available/000-default.conf
-WORKDIR /var/www/html
-VOLUME /var/www/html
+WORKDIR /var/www/html/
 
-# COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-COPY --link --chmod=755 docker-entrypoint.sh /usr/local/bin/docker-entrypoint
-
-# RUN chmod +x /usr/local/bin/docker-entrypoint.sh
-
-ENTRYPOINT ["docker-entrypoint"]
-CMD ["apache2-foreground"]
+ENTRYPOINT ["docker-entrypoint.sh"]
