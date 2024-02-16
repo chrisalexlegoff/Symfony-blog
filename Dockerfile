@@ -34,7 +34,7 @@ RUN git config --global user.email "legoffchristophealexandre@gmail.com" \
     &&  git config --global user.name "legoffchristophealexandre@gmail.com"
 
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-COPY --from=app .  /var/www/html
+COPY app/  /var/www/html
 
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
