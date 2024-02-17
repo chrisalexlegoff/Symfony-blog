@@ -1,8 +1,11 @@
 version: "3.8"
 
 services:
-  php8-sf6:
+  php:
     container_name: symfony-test
+    hostname: symfony-test
+    networks:
+      - caddy-network
     build: .
     environment:
       - SYMFONY_PARAMS=${SYMFONY_PARAMS}
@@ -26,6 +29,6 @@ volumes:
   db-data:
 
 networks:
-  default:
+  caddy-network:
     external: true
     name: caddy-network
