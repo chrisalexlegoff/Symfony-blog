@@ -22,8 +22,10 @@ services:
     ports:
       - "5432"
 
-networks:
-  bridge:
-
 volumes:
   db-data:
+
+networks:
+  default:
+    external: true
+    name: caddy-network
